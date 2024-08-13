@@ -1,0 +1,33 @@
+int n = nums.size();
+        vector<int> dp(n, 0);
+        vector<int> cost(n, 0);
+
+        // Initialize the dp array with the maximum possible value
+        for (int i = 0; i < n; i++) {
+            dp[i] = INT_MAX;
+        }
+
+        // Build the dp array from the end towards the start
+        for (int i = n - 1; i >= 0; i--) {
+            int length = 0;
+            for (int j = i; j < n; j++) {
+                // Calculate the length of the words from i to j
+                length += nums[j];
+                if (j > i) length++; // Add space between words
+
+                if (length > k) break; // If exceeds line width, break
+
+                // Calculate cost if this is not the last line
+                int extraSpaces = k - length;
+                int lineCost = (j == n - 1) ? 0 : extraSpaces * extraSpaces;
+
+                // Update dp[i] considering placing words i to j on one line
+                if (j + 1 < n) {
+                    dp[i] = min(dp[i], lineCost + dp[j + 1]);
+                } else {
+                    dp[i] = min(dp[i], lineCost);
+                }
+            }
+        }
+
+        return dp[0
