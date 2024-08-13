@@ -1,0 +1,44 @@
+int n = s.length();
+        int m = p.length();
+
+        if (m > n) return "-1";
+
+        vector<int> p_count(256, 0);
+        vector<int> s_count(256, 0);
+
+        // Count frequency of characters in string p
+        for (char c : p) {
+            p_count[c]++;
+        }
+
+        int start = 0, count = 0, min_length = INT_MAX, min_start = 0;
+
+        for (int end = 0; end < n; end++) {
+            char end_char = s[end];
+            s_count[end_char]++;
+
+            if (p_count[end_char] != 0 && s_count[end_char] <= p_count[end_char]) {
+                count++;
+            }
+
+            while (count == m) {
+                if (end - start + 1 < min_length) {
+                    min_length = end - start + 1;
+                    min_start = start;
+                }
+
+                char start_char = s[start];
+                s_count[start_char]--;
+
+                if (p_count[start_char] != 0 && s_count[start_char] < p_count[start_char]) {
+                    count--;
+                }
+                start++;
+            }
+        }
+
+        if (min_length == INT_MAX) return "-1";
+
+        return s.substr(min_start, min_length);
+    }
+};
