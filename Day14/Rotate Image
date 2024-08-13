@@ -1,26 +1,41 @@
- unordered_map<string, vector<string>> anagram_map;
-        vector<string> appearance_order;
-        unordered_map<string, bool> seen;
+class Solution {
+public:
+    void rotate(vector<vector<int>>& matrix) {
+       
+    int n = matrix.size();
 
-        // Group words by their sorted characters
-        for (const string& word : string_list) {
-            string sorted_word = word;
-            sort(sorted_word.begin(), sorted_word.end());
-            if (anagram_map.find(sorted_word) == anagram_map.end()) {
-                appearance_order.push_back(sorted_word);
-            }
-            anagram_map[sorted_word].push_back(word);
+    // Step 1: Transpose the matrix
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            swap(matrix[i][j], matrix[j][i]);
         }
-
-        vector<vector<string>> result;
-
-        // Collect groups based on their first appearance order
-        for (const string& sorted_word : appearance_order) {
-            vector<string>& group = anagram_map[sorted_word];
-            sort(group.begin(), group.end()); // Sort each group lexicographically
-            result.push_back(group);
-        }
-
-        return result;
     }
+
+    // Step 2: Reverse each row
+    for (int i = 0; i < n; i++) {
+        reverse(matrix[i].begin(), matrix[i].end());
+    }
+}
+
+int main() {
+    vector<vector<int>> matrix = {
+        {1, 2, 3},
+        {4, 5, 6},
+        {7, 8, 9}
+    };
+
+    rotate(matrix);
+
+    // Print the rotated matrix
+    for (const auto& row : matrix) {
+        for (int val : row) {
+            cout << val << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
+
+    
 };
