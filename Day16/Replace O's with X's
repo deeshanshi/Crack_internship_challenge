@@ -1,0 +1,41 @@
+void dfs(vector<vector<char>>& mat, int x, int y, int n, int m) {
+        // Boundary and base condition checks
+        if (x < 0 || y < 0 || x >= n || y >= m || mat[x][y] != 'O') {
+            return;
+        }
+
+        // Mark the cell as visited by changing 'O' to a temporary character, e.g., 'T'
+        mat[x][y] = 'T';
+
+        // Visit all 4 possible directions
+        dfs(mat, x + 1, y, n, m); // down
+        dfs(mat, x - 1, y, n, m); // up
+        dfs(mat, x, y + 1, n, m); // right
+        dfs(mat, x, y - 1, n, m); // left
+    }
+
+    vector<vector<char>> fill(int n, int m, vector<vector<char>> mat) {
+        // Start DFS from all 'O's on the borders
+        for (int i = 0; i < n; ++i) {
+            if (mat[i][0] == 'O') dfs(mat, i, 0, n, m);
+            if (mat[i][m-1] == 'O') dfs(mat, i, m-1, n, m);
+        }
+        for (int j = 0; j < m; ++j) {
+            if (mat[0][j] == 'O') dfs(mat, 0, j, n, m);
+            if (mat[n-1][j] == 'O') dfs(mat, n-1, j, n, m);
+        }
+
+        // Convert all remaining 'O's to 'X's and revert the 'T's back to 'O'
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (mat[i][j] == 'O') {
+                    mat[i][j] = 'X';
+                } else if (mat[i][j] == 'T') {
+                    mat[i][j] = 'O';
+                }
+            }
+        }
+
+        return mat;
+    }
+};
