@@ -1,0 +1,17 @@
+bool isPossible(int k, vector<int>& arr1, vector<int>& arr2) {
+        // Sort arr1 in ascending order
+        sort(arr1.begin(), arr1.end());
+        
+        // Sort arr2 in descending order
+        sort(arr2.begin(), arr2.end(), greater<int>());
+        
+        // Check if the sum of corresponding elements in both arrays is >= k
+        for (int i = 0; i < arr1.size(); i++) {
+            if (arr1[i] + arr2[i] < k) {
+                return false; // If any sum is less than k, return false
+            }
+        }
+        
+        return true; // All sums are greater than or equal to k
+    }
+};
