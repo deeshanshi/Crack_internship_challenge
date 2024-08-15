@@ -1,0 +1,37 @@
+void dfs(vector<vector<char>>& grid, int x, int y, int n, int m) {
+        // Base case: If the cell is out of bounds or is water ('0'), return.
+        if (x < 0 || y < 0 || x >= n || y >= m || grid[x][y] == '0')
+            return;
+
+        // Mark the current cell as visited by setting it to '0'.
+        grid[x][y] = '0';
+
+        // Visit all 8 possible directions (up, down, left, right, and the 4 diagonals).
+        dfs(grid, x + 1, y, n, m); // down
+        dfs(grid, x - 1, y, n, m); // up
+        dfs(grid, x, y + 1, n, m); // right
+        dfs(grid, x, y - 1, n, m); // left
+        dfs(grid, x + 1, y + 1, n, m); // down-right
+        dfs(grid, x - 1, y - 1, n, m); // up-left
+        dfs(grid, x + 1, y - 1, n, m); // down-left
+        dfs(grid, x - 1, y + 1, n, m); // up-right
+    }
+
+    int numIslands(vector<vector<char>>& grid) {
+        int n = grid.size();
+        int m = grid[0].size();
+        int count = 0;
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < m; ++j) {
+                if (grid[i][j] == '1') {
+                    // Found an unvisited land cell, perform DFS and increment the island count.
+                    dfs(grid, i, j, n, m);
+                    count++;
+                }
+            }
+        }
+
+        return count;
+    }
+};
