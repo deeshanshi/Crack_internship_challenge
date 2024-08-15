@@ -1,0 +1,25 @@
+ vector<vector<string>> Anagrams(vector<string>& words) {
+        map<string, vector<string>> anagramGroups;
+        
+        // Group words by their sorted character sequence
+        for (string word : words) {
+            string sortedWord = word;
+            sort(sortedWord.begin(), sortedWord.end());
+            anagramGroups[sortedWord].push_back(word);
+        }
+        
+        // Prepare the result vector
+        vector<vector<string>> result;
+        
+        for (string word : words) {
+            string sortedWord = word;
+            sort(sortedWord.begin(), sortedWord.end());
+            if (!anagramGroups[sortedWord].empty()) {
+                result.push_back(anagramGroups[sortedWord]);
+                anagramGroups[sortedWord].clear(); // To ensure we don't repeat groups
+            }
+        }
+        
+        return result;
+    }
+};
