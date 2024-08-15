@@ -1,0 +1,12 @@
+bool arraySortedOrNot(vector<int>& arr) {
+        // Loop through the array
+        for (int i = 0; i < arr.size() - 1; i++) {
+            // If the current element is greater than the next element, return false
+            if (arr[i] > arr[i + 1]) {
+                return false;
+            }
+        }
+        // If we didn't find any elements out of order, return true
+        return true;
+    }
+};
