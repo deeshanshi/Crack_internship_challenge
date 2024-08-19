@@ -1,0 +1,38 @@
+class MyStack 
+{
+    queue<pair<int, int>> q;
+    int i = 0;
+
+public:
+    MyStack() {}
+    
+    void push(int x) 
+    {
+        q.push({x, i});
+        i++;
+    }
+    
+    int pop() 
+    {
+        auto x = q.back();
+
+        while(q.front() != x)
+        {
+            q.push(q.front());
+            q.pop();
+        }   
+
+        q.pop();
+        return x.first;
+    }
+    
+    int top() 
+    {
+        return q.back().first;
+    }
+    
+    bool empty() 
+    {
+        return q.empty();
+    }
+};
