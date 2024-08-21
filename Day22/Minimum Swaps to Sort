@@ -1,0 +1,47 @@
+
+class Solution 
+{
+public:
+    // Function to find the minimum number of swaps required to sort the array.
+    int minSwaps(std::vector<int>& nums)
+    {
+        int n = nums.size();
+        std::vector<std::pair<int, int>> arrPos(n);
+
+        // Store the original positions of elements in the array.
+        for (int i = 0; i < n; i++) {
+            arrPos[i] = {nums[i], i};
+        }
+
+        // Sort the array by array value.
+        std::sort(arrPos.begin(), arrPos.end());
+
+        // To keep track of visited elements.
+        std::vector<bool> visited(n, false);
+        
+        // Initialize the count of swaps.
+        int swapCount = 0;
+
+        for (int i = 0; i < n; i++) {
+            // If already visited or already in correct position.
+            if (visited[i] || arrPos[i].second == i)
+                continue;
+
+            // Find out the cycle size.
+            int cycleSize = 0;
+            int j = i;
+
+            while (!visited[j]) {
+                visited[j] = true;
+                j = arrPos[j].second;
+                cycleSize++;
+            }
+
+            // If there is a cycle of size greater than 1, then we will need (cycleSize - 1) swaps.
+            if (cycleSize > 1)
+                swapCount += (cycleSize - 1);
+        }
+
+        return swapCount;
+    }
+};
