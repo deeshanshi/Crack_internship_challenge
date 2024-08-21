@@ -1,0 +1,111 @@
+class Solution
+{
+public:
+    // Function to sort the given linked list in non-decreasing order.
+    void sort(Node **head)
+    {
+        if (*head == nullptr || (*head)->next == nullptr)
+            return;
+
+        Node *asc = nullptr, *ascTail = nullptr;  // List for ascending part
+        Node *desc = nullptr, *descTail = nullptr;  // List for descending part
+
+        Node *curr = *head;
+        bool ascending = true;  // Track alternating order
+
+        while (curr)
+        {
+            if (ascending)
+            {
+                if (asc == nullptr)
+                {
+                    asc = curr;
+                    ascTail = asc;
+                }
+                else
+                {
+                    ascTail->next = curr;
+                    ascTail = ascTail->next;
+                }
+            }
+            else
+            {
+                if (desc == nullptr)
+                {
+                    desc = curr;
+                    descTail = desc;
+                }
+                else
+                {
+                    descTail->next = curr;
+                    descTail = descTail->next;
+                }
+            }
+            curr = curr->next;
+            ascending = !ascending;
+        }
+
+        // Terminate the last nodes of both lists
+        if (ascTail) ascTail->next = nullptr;
+        if (descTail) descTail->next = nullptr;
+
+        // Reverse the descending part to make it ascending
+        desc = reverseList(desc);
+
+        // Merge the two sorted lists
+        *head = mergeLists(asc, desc);
+    }
+
+private:
+    // Helper function to reverse a linked list
+    Node *reverseList(Node *head)
+    {
+        Node *prev = nullptr, *curr = head, *next = nullptr;
+
+        while (curr)
+        {
+            next = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = next;
+        }
+
+        return prev;
+    }
+
+    // Helper function to merge two sorted linked lists
+    Node *mergeLists(Node *l1, Node *l2)
+    {
+        if (!l1) return l2;
+        if (!l2) return l1;
+
+        Node *dummy = new Node(0);  // Dummy node to simplify merging
+        Node *tail = dummy;
+
+        while (l1 && l2)
+        {
+            if (l1->data <= l2->data)
+            {
+                tail->next = l1;
+                l1 = l1->next;
+            }
+            else
+            {
+                tail->next = l2;
+                l2 = l2->next;
+            }
+            tail = tail->next;
+        }
+
+        // Attach the remaining elements
+        if (l1)
+            tail->next = l1;
+        else
+            tail->next = l2;
+
+        Node *sortedHead = dummy->next;
+        delete dummy;  // Free the dummy node
+
+        return sortedHead;
+    }
+};
