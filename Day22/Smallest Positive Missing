@@ -1,0 +1,24 @@
+class Solution
+{
+    public:
+    // Function to find the smallest positive number missing from the array.
+    int missingNumber(int arr[], int n) 
+    { 
+        for (int i = 0; i < n; i++) {
+            // Keep swapping until arr[i] is in the correct position, i.e., arr[i] == arr[arr[i] - 1]
+            while (arr[i] > 0 && arr[i] <= n && arr[i] != arr[arr[i] - 1]) {
+                std::swap(arr[i], arr[arr[i] - 1]);
+            }
+        }
+        
+        // Find the first index that does not have the correct number.
+        for (int i = 0; i < n; i++) {
+            if (arr[i] != i + 1) {
+                return i + 1;
+            }
+        }
+        
+        // If all positions are correct, then the missing number is N + 1.
+        return n + 1;
+    } 
+};
