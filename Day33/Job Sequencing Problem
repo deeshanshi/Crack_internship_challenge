@@ -1,0 +1,33 @@
+ std::sort(arr, arr + n, [](Job &a, Job &b) {
+            return a.profit > b.profit;
+        });
+
+        // Find the maximum deadline
+        int maxDeadline = 0;
+        for (int i = 0; i < n; i++) {
+            maxDeadline = std::max(maxDeadline, arr[i].dead);
+        }
+
+        // Create an array to keep track of the time slots that are filled
+        std::vector<int> slot(maxDeadline + 1, -1);
+
+        int jobCount = 0;
+        int maxProfit = 0;
+
+        // Iterate through the jobs and schedule them greedily
+        for (int i = 0; i < n; i++) {
+            // Find a slot from job's deadline to earlier possible slot
+            for (int j = arr[i].dead; j > 0; j--) {
+                // If the slot is available, assign the job to that slot
+                if (slot[j] == -1) {
+                    slot[j] = arr[i].id;  // Mark this slot as filled
+                    jobCount++;
+                    maxProfit += arr[i].profit;
+                    break;  // Move to the next job
+                }
+            }
+        }
+
+        return {jobCount, maxProfit};
+    }
+};
