@@ -1,0 +1,50 @@
+class Solution {
+public:
+    // Helper function to recursively check if K equal sum subsets can be formed.
+    bool canPartition(int a[], vector<bool>& visited, int index, int currentSum, int targetSum, int k, int n) {
+        // If k subsets have been created successfully.
+        if (k == 1) {
+            return true;
+        }
+
+        // If current subset is filled to the required targetSum, start a new subset.
+        if (currentSum == targetSum) {
+            return canPartition(a, visited, 0, 0, targetSum, k - 1, n);
+        }
+
+        // Try to place elements into the current subset.
+        for (int i = index; i < n; i++) {
+            if (!visited[i] && currentSum + a[i] <= targetSum) {
+                visited[i] = true;
+                // Recursively try to form the subset.
+                if (canPartition(a, visited, i + 1, currentSum + a[i], targetSum, k, n)) {
+                    return true;
+                }
+                // Backtrack if the current choice doesn't work.
+                visited[i] = false;
+            }
+        }
+
+        // Return false if no valid subset can be formed with the current configuration.
+        return false;
+    }
+
+    bool isKPartitionPossible(int a[], int n, int k) {
+        // Calculate the total sum of the array.
+        int totalSum = accumulate(a, a + n, 0);
+
+        // If totalSum is not divisible by K, we cannot partition the array.
+        if (totalSum % k != 0) {
+            return false;
+        }
+
+        // Each subset should sum to targetSum.
+        int targetSum = totalSum / k;
+
+        // Create a visited array to track used elements.
+        vector<bool> visited(n, false);
+
+        // Use backtracking to check if K equal sum subsets can be formed.
+        return canPartition(a, visited, 0, 0, targetSum, k, n);
+    }
+};
