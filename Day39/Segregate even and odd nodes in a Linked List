@@ -1,0 +1,51 @@
+class Solution {
+public:
+    Node* divide(Node* head) {
+        if (!head) return head; // Edge case: empty list
+
+        // Initialize dummy heads for even and odd lists
+        Node* evenHead = NULL;
+        Node* oddHead = NULL;
+        Node* evenTail = NULL;
+        Node* oddTail = NULL;
+
+        // Traverse the original list
+        Node* curr = head;
+        while (curr != NULL) {
+            if (curr->data % 2 == 0) {
+                // Current node is even
+                if (evenHead == NULL) {
+                    // First even node found
+                    evenHead = curr;
+                    evenTail = curr;
+                } else {
+                    // Append to the even list
+                    evenTail->next = curr;
+                    evenTail = evenTail->next;
+                }
+            } else {
+                // Current node is odd
+                if (oddHead == NULL) {
+                    // First odd node found
+                    oddHead = curr;
+                    oddTail = curr;
+                } else {
+                    // Append to the odd list
+                    oddTail->next = curr;
+                    oddTail = oddTail->next;
+                }
+            }
+            curr = curr->next; // Move to the next node
+        }
+
+        // Handle cases where either even or odd list is empty
+        if (!evenHead) return oddHead;  // No even nodes
+        if (!oddHead) return evenHead;  // No odd nodes
+
+        // Link even list to the odd list
+        evenTail->next = oddHead;
+        oddTail->next = NULL; // Terminate the odd list
+
+        return evenHead; // The head of the new modified list
+    }
+};
