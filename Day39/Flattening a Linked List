@@ -1,0 +1,37 @@
+class Solution {
+public:
+    // Merge two sorted linked lists using the bottom pointer
+    Node* mergeTwoLists(Node* a, Node* b) {
+        // If one of the lists is empty, return the other one
+        if (!a) return b;
+        if (!b) return a;
+        
+        // Pointer to store the result
+        Node* result;
+        
+        // Pick either `a` or `b` and recursively merge
+        if (a->data < b->data) {
+            result = a;
+            result->bottom = mergeTwoLists(a->bottom, b);
+        } else {
+            result = b;
+            result->bottom = mergeTwoLists(a, b->bottom);
+        }
+        
+        return result;
+    }
+
+    // Function which returns the root of the flattened linked list
+    Node* flatten(Node* root) {
+        // Base case: If the root is null or there is no next list, return the root
+        if (!root || !root->next) return root;
+        
+        // Recursively flatten the next linked list
+        root->next = flatten(root->next);
+        
+        // Merge the current list with the next flattened list
+        root = mergeTwoLists(root, root->next);
+        
+        return root;
+    }
+};
