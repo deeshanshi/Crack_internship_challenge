@@ -1,0 +1,112 @@
+class Solution {
+public:
+    // Helper function to remove leading zeros from a list
+    Node* removeLeadingZeros(Node* head) {
+        while (head && head->data == 0) {
+            head = head->next;
+        }
+        return head ? head : new Node(0); // If all are zeros, return a single node with value 0
+    }
+
+    // Helper function to reverse a linked list
+    Node* reverseList(Node* head) {
+        Node* prev = NULL;
+        Node* curr = head;
+        while (curr) {
+            Node* nextTemp = curr->next;
+            curr->next = prev;
+            prev = curr;
+            curr = nextTemp;
+        }
+        return prev;
+    }
+
+    // Helper function to compare two lists
+    bool isLargerOrEqual(Node* head1, Node* head2) {
+        // First compare by length
+        int len1 = 0, len2 = 0;
+        Node* temp1 = head1;
+        Node* temp2 = head2;
+        
+        while (temp1) {
+            len1++;
+            temp1 = temp1->next;
+        }
+        while (temp2) {
+            len2++;
+            temp2 = temp2->next;
+        }
+        
+        if (len1 != len2) {
+            return len1 > len2;
+        }
+        
+        // If lengths are the same, compare digit by digit
+        while (head1 && head2) {
+            if (head1->data != head2->data) {
+                return head1->data > head2->data;
+            }
+            head1 = head1->next;
+            head2 = head2->next;
+        }
+        
+        return true; // If they are equal, treat it as larger or equal
+    }
+
+    // Function to subtract two linked lists
+    Node* subLinkedList(Node* head1, Node* head2) {
+        // Step 1: Remove leading zeros from both lists
+        head1 = removeLeadingZeros(head1);
+        head2 = removeLeadingZeros(head2);
+
+        // Step 2: Compare the two lists to determine the larger one
+        if (!isLargerOrEqual(head1, head2)) {
+            // Swap head1 and head2 if head2 is larger
+            std::swap(head1, head2);
+        }
+
+        // Step 3: Reverse both lists to subtract from least significant digit
+        head1 = reverseList(head1);
+        head2 = reverseList(head2);
+
+        Node* result = NULL;
+        Node* tail = NULL;
+        int borrow = 0;
+
+        // Step 4: Subtract digit by digit
+        while (head1) {
+            int val1 = head1->data;
+            int val2 = (head2 ? head2->data : 0);
+
+            int diff = val1 - val2 - borrow;
+            if (diff < 0) {
+                diff += 10;
+                borrow = 1;
+            } else {
+                borrow = 0;
+            }
+
+            // Create a new node for the result
+            Node* newNode = new Node(diff);
+            if (!result) {
+                result = newNode;
+                tail = newNode;
+            } else {
+                tail->next = newNode;
+                tail = tail->next;
+            }
+
+            // Move to the next node
+            head1 = head1->next;
+            if (head2) head2 = head2->next;
+        }
+
+        // Step 5: Reverse the result list to restore the correct order
+        result = reverseList(result);
+
+        // Step 6: Remove leading zeros from the result
+        result = removeLeadingZeros(result);
+
+        return result;
+    }
+};
