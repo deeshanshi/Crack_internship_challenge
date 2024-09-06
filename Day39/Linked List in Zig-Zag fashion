@@ -1,0 +1,40 @@
+class Solution {
+public:
+    Node* zigZag(Node* head) {
+        if (head == NULL || head->next == NULL) {
+            return head; // Edge case: if the list is empty or has only one node
+        }
+
+        // Initialize flag as true, meaning we are expecting current <= next
+        bool flag = true; 
+        Node* curr = head;
+
+        // Traverse the list till the second last node
+        while (curr->next != NULL) {
+            if (flag) {
+                // If flag is true, we expect curr <= next
+                if (curr->data > curr->next->data) {
+                    // Swap data if curr > next
+                    int temp = curr->data;
+                    curr->data = curr->next->data;
+                    curr->next->data = temp;
+                }
+            } else {
+                // If flag is false, we expect curr >= next
+                if (curr->data < curr->next->data) {
+                    // Swap data if curr < next
+                    int temp = curr->data;
+                    curr->data = curr->next->data;
+                    curr->next->data = temp;
+                }
+            }
+            // Flip the flag for the next pair
+            flag = !flag;
+
+            // Move to the next pair
+            curr = curr->next;
+        }
+
+        return head; // Return the modified head of the list
+    }
+};
