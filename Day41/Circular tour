@@ -1,0 +1,25 @@
+class Solution {
+  public:
+    // Function to find the starting point where the truck can start and complete the circle
+    int tour(petrolPump p[], int n) {
+        int start = 0;       // Starting index
+        int totalPetrol = 0; // Track total petrol balance for the entire journey
+        int currPetrol = 0;  // Track petrol balance from current start
+        
+        // Traverse each petrol pump
+        for (int i = 0; i < n; i++) {
+            totalPetrol += p[i].petrol - p[i].distance;
+            currPetrol += p[i].petrol - p[i].distance;
+            
+            // If current petrol balance is negative, reset the start point
+            if (currPetrol < 0) {
+                start = i + 1;   // Start from the next pump
+                currPetrol = 0;  // Reset the current petrol
+            }
+        }
+        
+        // If total petrol balance is non-negative, return the start point
+        // Otherwise, return -1 meaning no solution exists
+        return totalPetrol >= 0 ? start : -1;
+    }
+};
