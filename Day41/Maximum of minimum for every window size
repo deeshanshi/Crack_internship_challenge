@@ -1,0 +1,49 @@
+class Solution {
+public:
+    // Function to find maximum of minimums of every window size.
+    vector<int> maxOfMin(int arr[], int n) {
+        // Arrays to store previous and next smaller
+        vector<int> left(n), right(n);
+        stack<int> s;
+
+        // Initialize left and right arrays
+        for (int i = 0; i < n; i++) {
+            // For left array, we calculate the nearest smaller to the left
+            while (!s.empty() && arr[s.top()] >= arr[i]) {
+                s.pop();
+            }
+            left[i] = s.empty() ? -1 : s.top();
+            s.push(i);
+        }
+
+        // Clear the stack for the next smaller to the right calculation
+        while (!s.empty()) {
+            s.pop();
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            // For right array, we calculate the nearest smaller to the right
+            while (!s.empty() && arr[s.top()] >= arr[i]) {
+                s.pop();
+            }
+            right[i] = s.empty() ? n : s.top();
+            s.push(i);
+        }
+
+        // Array to store the result
+        vector<int> result(n, 0);
+
+        // Compute result[] using the length of the window where arr[i] is the minimum
+        for (int i = 0; i < n; i++) {
+            int len = right[i] - left[i] - 1; // Window size where arr[i] is the minimum
+            result[len - 1] = max(result[len - 1], arr[i]);
+        }
+
+        // Fill the remaining values to make sure result[i] >= result[i + 1]
+        for (int i = n - 2; i >= 0; i--) {
+            result[i] = max(result[i], result[i + 1]);
+        }
+
+        return result;
+    }
+};
