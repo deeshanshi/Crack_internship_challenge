@@ -1,0 +1,40 @@
+class Solution {
+public:
+    void findPreSuc(Node* root, Node*& pre, Node*& suc, int key) {
+        // Initialize predecessor and successor
+        pre = NULL;
+        suc = NULL;
+
+        // Iterate through the BST to find the node with the given key
+        while (root) {
+            if (root->key < key) {
+                // Root is less than key, so root could be a predecessor
+                pre = root;
+                root = root->right;
+            } else if (root->key > key) {
+                // Root is greater than key, so root could be a successor
+                suc = root;
+                root = root->left;
+            } else {
+                // Key is found; handle predecessor and successor
+                if (root->left) {
+                    // Find the maximum value in the left subtree
+                    Node* temp = root->left;
+                    while (temp->right) {
+                        temp = temp->right;
+                    }
+                    pre = temp;
+                }
+                if (root->right) {
+                    // Find the minimum value in the right subtree
+                    Node* temp = root->right;
+                    while (temp->left) {
+                        temp = temp->left;
+                    }
+                    suc = temp;
+                }
+                return;
+            }
+        }
+    }
+};
