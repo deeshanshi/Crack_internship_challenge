@@ -1,0 +1,31 @@
+class Solution
+{
+    public:
+    // Function to evaluate a postfix expression.
+    int evaluatePostfix(string S)
+    {
+        // Stack to store operands.
+        stack<int> stk;
+
+        // Traversing the string
+        for(char ch : S) {
+            // If the character is a digit, push it to the stack
+            if(isdigit(ch)) {
+                stk.push(ch - '0');  // Convert character to integer
+            }
+            // If it's an operator, pop two operands and apply the operator
+            else {
+                int op2 = stk.top(); stk.pop();
+                int op1 = stk.top(); stk.pop();
+                
+                // Perform the operation based on the operator
+                if(ch == '+') stk.push(op1 + op2);
+                else if(ch == '-') stk.push(op1 - op2);
+                else if(ch == '*') stk.push(op1 * op2);
+                else if(ch == '/') stk.push(op1 / op2);
+            }
+        }
+        // The final result will be the last element in the stack
+        return stk.top();
+    }
+};
