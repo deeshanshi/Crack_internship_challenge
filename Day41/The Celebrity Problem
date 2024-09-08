@@ -1,0 +1,32 @@
+class Solution {
+public:
+    // Function to find if there is a celebrity in the party or not.
+    int celebrity(vector<vector<int>>& mat) {
+        int n = mat.size();
+        int left = 0, right = n - 1;
+
+        // Find the potential celebrity
+        while (left < right) {
+            if (mat[left][right] == 1) {
+                // left knows right, so left cannot be the celebrity
+                left++;
+            } else {
+                // left does not know right, so right cannot be the celebrity
+                right--;
+            }
+        }
+
+        // Verify if the candidate is a celebrity
+        int candidate = left;
+        
+        for (int i = 0; i < n; ++i) {
+            if (i != candidate) {
+                if (mat[candidate][i] == 1 || mat[i][candidate] == 0) {
+                    return -1; // candidate knows someone or someone does not know candidate
+                }
+            }
+        }
+        
+        return candidate;
+    }
+};
