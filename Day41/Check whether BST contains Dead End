@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool isDeadEnd(Node *root) {
+        // Use -1 as the initial low and INT_MAX as the initial high values
+        return isDeadEndHelper(root, 1, INT_MAX);
+    }
+
+private:
+    bool isDeadEndHelper(Node *root, int low, int high) {
+        if (!root) return false;
+
+        // Check if the node is a leaf node
+        if (!root->left && !root->right) {
+            // A leaf node is a dead end if there is no space for any other node
+            // In this range, root->data should be the only possible value
+            if (low == root->data || high == root->data) {
+                return true;
+            }
+            return false;
+        }
+
+        // Traverse the left subtree with updated high value
+        bool leftDeadEnd = isDeadEndHelper(root->left, low, root->data - 1);
+        // Traverse the right subtree with updated low value
+        bool rightDeadEnd = isDeadEndHelper(root->right, root->data + 1, high);
+        
+        return leftDeadEnd ||
