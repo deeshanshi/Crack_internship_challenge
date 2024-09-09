@@ -1,0 +1,50 @@
+class Node {
+public:
+    int data;
+    Node* left;
+    Node* right;
+    
+    Node(int val) {
+        data = val;
+        left = right = nullptr;
+    }
+};
+
+class Solution {
+public:
+    // Function to find the Lowest Common Ancestor (LCA)
+    Node* findLCA(Node* root, int a, int b) {
+        if (root == nullptr) return nullptr;
+        if (root->data == a || root->data == b) return root;
+        
+        Node* left = findLCA(root->left, a, b);
+        Node* right = findLCA(root->right, a, b);
+        
+        if (left != nullptr && right != nullptr) return root;
+        return left != nullptr ? left : right;
+    }
+    
+    // Function to find the distance from the root node to the target node
+    int findDistance(Node* root, int target, int dist) {
+        if (root == nullptr) return -1;  // target not found
+        if (root->data == target) return dist;
+        
+        int leftDist = findDistance(root->left, target, dist + 1);
+        if (leftDist != -1) return leftDist;
+        
+        return findDistance(root->right, target, dist + 1);
+    }
+
+    // Function to return minimum distance between a and b in a tree with given root
+    int findDist(Node* root, int a, int b) {
+        // Step 1: Find the LCA of a and b
+        Node* lca = findLCA(root, a, b);
+        
+        // Step 2: Find distance from LCA to a and b
+        int distA = findDistance(lca, a, 0);
+        int distB = findDistance(lca, b, 0);
+        
+        // Step 3: Return the sum of both distances
+        return distA + distB;
+    }
+};
