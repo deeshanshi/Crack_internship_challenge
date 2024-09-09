@@ -1,0 +1,17 @@
+ fill(visited.begin(), visited.end(), false);
+        int sccCount = 0;
+        
+        while (!st.empty()) {
+            int node = st.top();
+            st.pop();
+            
+            // If the node hasn't been visited in the transposed graph, it is a new SCC.
+            if (!visited[node]) {
+                dfs2(node, transpose, visited);
+                sccCount++;
+            }
+        }
+        
+        return sccCount;
+    }
+};
