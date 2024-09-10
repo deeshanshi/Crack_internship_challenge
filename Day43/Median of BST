@@ -1,0 +1,52 @@
+struct Node {
+    int data;
+    Node* left, *right;
+};
+
+// Helper function for in-order traversal to count the number of nodes
+int countNodes(Node* root) {
+    if (!root) return 0;
+    return countNodes(root->left) + countNodes(root->right) + 1;
+}
+
+// Helper function to find the median using in-order traversal
+void findMedianUtil(Node* root, int& count, int n, float& result, Node*& prev) {
+    if (!root) return;
+    
+    // In-order traversal of the left subtree
+    findMedianUtil(root->left, count, n, result, prev);
+    
+    // Increment count of visited nodes
+    count++;
+    
+    // If odd number of nodes, find the middle node
+    if (n % 2 == 1 && count == (n+1)/2) {
+        result = root->data;
+        return;
+    }
+    
+    // If even number of nodes, find the average of the two middle nodes
+    if (n % 2 == 0 && count == n/2) {
+        prev = root; // First middle node
+    }
+    if (n % 2 == 0 && count == n/2 + 1) {
+        result = (prev->data + root->data) / 2.0;
+        return;
+    }
+    
+    // In-order traversal of the right subtree
+    findMedianUtil(root->right, count, n, result, prev);
+}
+
+float findMedian(Node* root) {
+    // Step 1: Count the total number of nodes in the BST
+    int n = countNodes(root);
+    
+    // Step 2: Traverse to find the median
+    int count = 0;
+    float result = 0;
+    Node* prev = nullptr;
+    findMedianUtil(root, count, n, result, prev);
+    
+    return result;
+}
