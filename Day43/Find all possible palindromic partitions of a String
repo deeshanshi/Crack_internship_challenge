@@ -1,0 +1,42 @@
+class Solution {
+public:
+    // Helper function to check if a substring is a palindrome
+    bool isPalindrome(string &s, int start, int end) {
+        while (start < end) {
+            if (s[start] != s[end]) return false;
+            start++;
+            end--;
+        }
+        return true;
+    }
+
+    // Backtracking function to find all palindromic partitions
+    void findPartitions(int index, string &s, vector<string> &currentPartition, vector<vector<string>> &result) {
+        // Base case: if we have reached the end of the string, store the current partition
+        if (index == s.length()) {
+            result.push_back(currentPartition);
+            return;
+        }
+
+        // Try to partition the string at every possible index
+        for (int i = index; i < s.length(); i++) {
+            // If the substring from index to i is a palindrome, include it in the partition
+            if (isPalindrome(s, index, i)) {
+                currentPartition.push_back(s.substr(index, i - index + 1)); // Add substring to the current partition
+                
+                // Recursively partition the rest of the string
+                findPartitions(i + 1, s, currentPartition, result);
+                
+                // Backtrack and remove the last added partition
+                currentPartition.pop_back();
+            }
+        }
+    }
+
+    vector<vector<string>> allPalindromicPerms(string S) {
+        vector<vector<string>> result;
+        vector<string> currentPartition;
+        findPartitions(0, S, currentPartition, result); // Start partitioning from index 0
+        return result;
+    }
+};
