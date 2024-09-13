@@ -1,0 +1,49 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+class Solution {
+public:
+    // Function to find the sum of weights of edges of the Minimum Spanning Tree.
+    int spanningTree(int V, vector<vector<int>> adj[]) {
+        // Min-heap to store (weight, vertex) and extract the smallest weight edge.
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        
+        // Visited array to keep track of vertices included in MST.
+        vector<bool> visited(V, false);
+        
+        // Start with vertex 0 and weight 0.
+        pq.push({0, 0});
+        int mstSum = 0;  // To store the sum of weights of the MST.
+        
+        while (!pq.empty()) {
+            // Get the vertex with the smallest edge weight.
+            pair<int, int> top = pq.top();
+            pq.pop();
+            
+            int weight = top.first;
+            int u = top.second;
+            
+            // If this vertex is already visited, skip it.
+            if (visited[u]) continue;
+            
+            // Mark the vertex as visited.
+            visited[u] = true;
+            
+            // Add the edge weight to the MST sum.
+            mstSum += weight;
+            
+            // Check all adjacent vertices of u.
+            for (auto &edge : adj[u]) {
+                int v = edge[0];  // Adjacent vertex.
+                int w = edge[1];  // Weight of the edge (u, v).
+                
+                // If the adjacent vertex is not visited, push it to the priority queue.
+                if (!visited[v]) {
+                    pq.push({w, v});
+                }
+            }
+        }
+        
+        return mstSum;
+    }
+};
